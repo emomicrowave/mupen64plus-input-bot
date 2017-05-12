@@ -11,7 +11,7 @@ typedef struct
 } SController;
 
 /* global data definitions */
-extern SController controller[1]; // 1 controller
+extern SController controller[2]; // 2 controllers lol
 
 /* global function definitions */
 extern void DebugMessage(int level, const char *message, ...);
