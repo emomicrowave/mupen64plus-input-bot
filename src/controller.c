@@ -120,8 +120,8 @@ void read_controller() {
 
     /* parse the body of the response */
     json_object *jsonObj = json_tokener_parse(body);
-    json_object *jsonContr0 = json_object_object_get(jsonObj, "Controller0")
-    json_object *jsonContr1 = json_object_object_get(jsonObj, "Controller1")
+    json_object *jsonContr0 = json_object_object_get(jsonObj, "Controller0");
+    json_object *jsonContr1 = json_object_object_get(jsonObj, "Controller1");
     
 /* print the object */
 #ifdef _DEBUG

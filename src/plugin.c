@@ -97,12 +97,13 @@ EXPORT void CALL InitiateControllers(CONTROL_INFO ControlInfo)
     // this small struct tells the core whether each controller is plugged in, and what type of pak is connected
     DebugMessage(M64MSG_INFO, "Initialising controllers... \n");
     
-    controller[0].control = ControlInfo.Controls;
-	
-	// Initialise 2 controllers
+    // Initialise 2 controllers
 	ControlInfo.Controls[0].Present = 1;
 	ControlInfo.Controls[1].Present = 1;
-
+    
+    controller[0].control = ControlInfo.Controls;
+    controller[1].control = ControlInfo.Controls;
+	
     // init controller
     controller[0].control->Present = 1;
     controller[0].control->Plugin = PLUGIN_NONE;
