@@ -11,7 +11,7 @@
 #include "controller.h"
 
 /* global data definitions */
-SController controller[1];  // 1 controller
+SController controller[2];  // 2 controllers
 
 /* static data definitions */
 static void (*l_DebugCallback)(void *, int, const char *) = NULL;
@@ -95,11 +95,21 @@ EXPORT void CALL InitiateControllers(CONTROL_INFO ControlInfo)
 
     // set our CONTROL struct pointers to the array that was passed in to this function from the core
     // this small struct tells the core whether each controller is plugged in, and what type of pak is connected
+    DebugMessage(M64MSG_INFO, "Initialising controllers... \n");
+    
     controller[0].control = ControlInfo.Controls;
+	
+	// Initialise 2 controllers
+	ControlInfo.Controls[0].Present = 1;
+	ControlInfo.Controls[1].Present = 1;
 
     // init controller
     controller[0].control->Present = 1;
     controller[0].control->Plugin = PLUGIN_NONE;
+
+	// init second controller
+	controller[1].control->Present = 1;
+	controller[1].control->Plugin = PLUGIN_NONE;
 
     DebugMessage(M64MSG_INFO, "%s version %i.%i.%i initialized.", PLUGIN_NAME, VERSION_PRINTF_SPLIT(PLUGIN_VERSION));
 }
@@ -171,13 +181,17 @@ EXPORT void CALL RomClosed(void)
 *******************************************************************/
 EXPORT void CALL GetKeys( int Control, BUTTONS *Keys )
 {
-    read_controller();
+	if (Control == 0){
+		// read controller ever two calls
+		read_controller();
+	}
+    
 
     #ifdef _DEBUG
       DebugMessage(M64MSG_VERBOSE, "Controller #%d value: 0x%8.8X", 0, *(int *)&controller[0].buttons );
     #endif
 
-    *Keys = controller[0].buttons;
+    *Keys = controller[Control].buttons;
 }
 
 /******************************************************************

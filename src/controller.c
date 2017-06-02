@@ -48,30 +48,31 @@ int socket_connect(char *host, int portno) {
     return sockfd;
 }
 
-void clear_controller() {
-    controller[0].buttons.R_DPAD = 0;
-    controller[0].buttons.L_DPAD = 0;
-    controller[0].buttons.D_DPAD = 0;
-    controller[0].buttons.U_DPAD = 0;
-    controller[0].buttons.START_BUTTON = 0;
-    controller[0].buttons.Z_TRIG = 0;
-    controller[0].buttons.B_BUTTON = 0;
-    controller[0].buttons.A_BUTTON = 0;
-    controller[0].buttons.R_CBUTTON = 0;
-    controller[0].buttons.L_CBUTTON = 0;
-    controller[0].buttons.D_CBUTTON = 0;
-    controller[0].buttons.U_CBUTTON = 0;
-    controller[0].buttons.R_TRIG = 0;
-    controller[0].buttons.L_TRIG = 0;
-    controller[0].buttons.X_AXIS = 0;
-    controller[0].buttons.Y_AXIS = 0;
+void clear_controller(int control) {
+    controller[control].buttons.R_DPAD = 0;
+    controller[control].buttons.L_DPAD = 0;
+    controller[control].buttons.D_DPAD = 0;
+    controller[control].buttons.U_DPAD = 0;
+    controller[control].buttons.START_BUTTON = 0;
+    controller[control].buttons.Z_TRIG = 0;
+    controller[control].buttons.B_BUTTON = 0;
+    controller[control].buttons.A_BUTTON = 0;
+    controller[control].buttons.R_CBUTTON = 0;
+    controller[control].buttons.L_CBUTTON = 0;
+    controller[control].buttons.D_CBUTTON = 0;
+    controller[control].buttons.U_CBUTTON = 0;
+    controller[control].buttons.R_TRIG = 0;
+    controller[control].buttons.L_TRIG = 0;
+    controller[control].buttons.X_AXIS = 0;
+    controller[control].buttons.Y_AXIS = 0;
 }
 
 void read_controller() {
     int sockfd = socket_connect(HOST, PORT);
 
     if (sockfd == -1) {
-        clear_controller();
+        clear_controller(0);
+        clear_controller(1);
         return;
     }
 
@@ -119,6 +120,8 @@ void read_controller() {
 
     /* parse the body of the response */
     json_object *jsonObj = json_tokener_parse(body);
+    json_object *jsonContr0 = json_object_object_get(jsonObj, "Controller0")
+    json_object *jsonContr1 = json_object_object_get(jsonObj, "Controller1")
     
 /* print the object */
 #ifdef _DEBUG
@@ -126,37 +129,70 @@ void read_controller() {
 #endif
 
     controller[0].buttons.R_DPAD = 
-        json_object_get_int(json_object_object_get(jsonObj, "R_DPAD"));
+        json_object_get_int(json_object_object_get(jsonContr0, "R_DPAD"));
     controller[0].buttons.L_DPAD = 
-        json_object_get_int(json_object_object_get(jsonObj, "L_DPAD"));
+        json_object_get_int(json_object_object_get(jsonContr0, "L_DPAD"));
     controller[0].buttons.D_DPAD = 
-        json_object_get_int(json_object_object_get(jsonObj, "D_DPAD"));
+        json_object_get_int(json_object_object_get(jsonContr0, "D_DPAD"));
     controller[0].buttons.U_DPAD = 
-        json_object_get_int(json_object_object_get(jsonObj, "U_DPAD"));
+        json_object_get_int(json_object_object_get(jsonContr0, "U_DPAD"));
     controller[0].buttons.START_BUTTON = 
-        json_object_get_int(json_object_object_get(jsonObj, "START_BUTTON"));
+        json_object_get_int(json_object_object_get(jsonContr0, "START_BUTTON"));
     controller[0].buttons.Z_TRIG = 
-        json_object_get_int(json_object_object_get(jsonObj, "Z_TRIG"));
+        json_object_get_int(json_object_object_get(jsonContr0, "Z_TRIG"));
     controller[0].buttons.B_BUTTON = 
-        json_object_get_int(json_object_object_get(jsonObj, "B_BUTTON"));
+        json_object_get_int(json_object_object_get(jsonContr0, "B_BUTTON"));
     controller[0].buttons.A_BUTTON = 
-        json_object_get_int(json_object_object_get(jsonObj, "A_BUTTON"));
+        json_object_get_int(json_object_object_get(jsonContr0, "A_BUTTON"));
     controller[0].buttons.R_CBUTTON = 
-        json_object_get_int(json_object_object_get(jsonObj, "R_CBUTTON"));
+        json_object_get_int(json_object_object_get(jsonContr0, "R_CBUTTON"));
     controller[0].buttons.L_CBUTTON = 
-        json_object_get_int(json_object_object_get(jsonObj, "L_CBUTTON"));
+        json_object_get_int(json_object_object_get(jsonContr0, "L_CBUTTON"));
     controller[0].buttons.D_CBUTTON = 
-        json_object_get_int(json_object_object_get(jsonObj, "D_CBUTTON"));
+        json_object_get_int(json_object_object_get(jsonContr0, "D_CBUTTON"));
     controller[0].buttons.U_CBUTTON = 
-        json_object_get_int(json_object_object_get(jsonObj, "U_CBUTTON"));
+        json_object_get_int(json_object_object_get(jsonContr0, "U_CBUTTON"));
     controller[0].buttons.R_TRIG = 
-        json_object_get_int(json_object_object_get(jsonObj, "R_TRIG"));
+        json_object_get_int(json_object_object_get(jsonContr0, "R_TRIG"));
     controller[0].buttons.L_TRIG = 
-        json_object_get_int(json_object_object_get(jsonObj, "L_TRIG"));
+        json_object_get_int(json_object_object_get(jsonContr0, "L_TRIG"));
     controller[0].buttons.X_AXIS = 
-        json_object_get_int(json_object_object_get(jsonObj, "X_AXIS"));
+        json_object_get_int(json_object_object_get(jsonContr0, "X_AXIS"));
     controller[0].buttons.Y_AXIS = 
-        json_object_get_int(json_object_object_get(jsonObj, "Y_AXIS"));
+        json_object_get_int(json_object_object_get(jsonContr0, "Y_AXIS"));
+        
+    controller[1].buttons.R_DPAD = 
+        json_object_get_int(json_object_object_get(jsonContr1, "R_DPAD"));
+    controller[1].buttons.L_DPAD = 
+        json_object_get_int(json_object_object_get(jsonContr1, "L_DPAD"));
+    controller[1].buttons.D_DPAD = 
+        json_object_get_int(json_object_object_get(jsonContr1, "D_DPAD"));
+    controller[1].buttons.U_DPAD = 
+        json_object_get_int(json_object_object_get(jsonContr1, "U_DPAD"));
+    controller[1].buttons.START_BUTTON = 
+        json_object_get_int(json_object_object_get(jsonContr1, "START_BUTTON"));
+    controller[1].buttons.Z_TRIG = 
+        json_object_get_int(json_object_object_get(jsonContr1, "Z_TRIG"));
+    controller[1].buttons.B_BUTTON = 
+        json_object_get_int(json_object_object_get(jsonContr1, "B_BUTTON"));
+    controller[1].buttons.A_BUTTON = 
+        json_object_get_int(json_object_object_get(jsonContr1, "A_BUTTON"));
+    controller[1].buttons.R_CBUTTON = 
+        json_object_get_int(json_object_object_get(jsonContr1, "R_CBUTTON"));
+    controller[1].buttons.L_CBUTTON = 
+        json_object_get_int(json_object_object_get(jsonContr1, "L_CBUTTON"));
+    controller[1].buttons.D_CBUTTON = 
+        json_object_get_int(json_object_object_get(jsonContr1, "D_CBUTTON"));
+    controller[1].buttons.U_CBUTTON = 
+        json_object_get_int(json_object_object_get(jsonContr1, "U_CBUTTON"));
+    controller[1].buttons.R_TRIG = 
+        json_object_get_int(json_object_object_get(jsonContr1, "R_TRIG"));
+    controller[1].buttons.L_TRIG = 
+        json_object_get_int(json_object_object_get(jsonContr1, "L_TRIG"));
+    controller[1].buttons.X_AXIS = 
+        json_object_get_int(json_object_object_get(jsonContr1, "X_AXIS"));
+    controller[1].buttons.Y_AXIS = 
+        json_object_get_int(json_object_object_get(jsonContr1, "Y_AXIS"));
 
     close(sockfd);
 }
